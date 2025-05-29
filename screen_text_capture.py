@@ -82,5 +82,10 @@ def main():
     # 4. Clean up the screenshot file
     os.unlink(tmpfile.name)
 
+    # 5. Copy text to clipboard
+    clipboard = QtWidgets.QApplication.clipboard()
+    clipboard.setText(text)
+    print("Text copied to clipboard.")
+
 if __name__ == "__main__":
     main()
