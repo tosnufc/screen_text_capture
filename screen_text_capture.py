@@ -50,7 +50,17 @@ class SelectionWidget(QtWidgets.QLabel):
 def main():
     # 1. Capture the entire screen and save as a temp file
     with mss.mss() as sct:
-        monitor = sct.monitors[1]  # Full screen
+        # Find the first valid monitor (not 0x0 dimensions)
+        monitor = None
+        for mon in sct.monitors:
+            if mon['width'] > 0 and mon['height'] > 0:
+                monitor = mon
+                break
+        
+        if not monitor:
+            print("Error: No valid monitor found!")
+            sys.exit(1)
+            
         sct_img = sct.grab(monitor)
         img = Image.frombytes('RGB', sct_img.size, sct_img.rgb)
         tmpfile = tempfile.NamedTemporaryFile(delete=False, suffix='.png')
@@ -89,3 +99,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+ 
